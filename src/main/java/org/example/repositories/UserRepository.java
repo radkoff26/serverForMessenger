@@ -167,6 +167,7 @@ public class UserRepository {
         User user = users.get(0);
         String serverPassword = user.getPassword();
         if (cryptInternal.decode(serverPassword).equals(cryptRest.decode(password))) {
+            user.setPassword(cryptRest.encode(cryptInternal.decode(user.getPassword())));
             return user;
         }
         return null;

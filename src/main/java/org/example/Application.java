@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.crypt.Crypt;
+import org.example.crypt.RestCrypt;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
