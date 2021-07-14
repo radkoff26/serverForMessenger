@@ -17,7 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.text.ParseException;
+import java.util.*;
 
 import static org.example.contractions.ChatContractions.ID;
 import static org.example.contractions.UsersContractions.*;
@@ -69,11 +70,13 @@ public class UserRepository {
                                 "(%s VARCHAR(255) NOT NULL PRIMARY KEY, " +
                                 "%s INT NOT NULL, " +
                                 "%s INT NOT NULL, " +
+                                "%s INT NOT NULL, " +
                                 "%s INT)",
                         chat_container,
                         ChatContainerContractions.ID,
                         CHATTER1,
                         CHATTER2,
+                        NOT_CHECKED,
                         ChatContainerContractions.IS_REMOVED)
         );
         return true;
@@ -114,16 +117,16 @@ public class UserRepository {
                     new UserMapper()).get(0);
             jdbcTemplate.execute("USE " + CONTAINERS);
             jdbcTemplate.execute(
-                    String.format("INSERT INTO %s(%s, %s, %s, %s) VALUES" +
-                                    "('%s', %d, %d, %d)", sender.getChatContainerName(),
-                            ChatContainerContractions.ID, CHATTER1, CHATTER2, ChatContainerContractions.IS_REMOVED,
-                            res, senderId, receiverId, 0)
+                    String.format("INSERT INTO %s(%s, %s, %s, %s, %s) VALUES" +
+                                    "('%s', %d, %d, %d, %d)", sender.getChatContainerName(),
+                            ChatContainerContractions.ID, CHATTER1, CHATTER2, NOT_CHECKED, ChatContainerContractions.IS_REMOVED,
+                            res, senderId, receiverId, 0, 0)
             );
             jdbcTemplate.execute(
-                    String.format("INSERT INTO %s(%s, %s, %s, %s) VALUES" +
-                                    "('%s', %d, %d, %d)", receiver.getChatContainerName(),
-                            ChatContainerContractions.ID, CHATTER1, CHATTER2, ChatContainerContractions.IS_REMOVED,
-                            res, senderId, receiverId, 0)
+                    String.format("INSERT INTO %s(%s, %s, %s, %s, %s) VALUES" +
+                                    "('%s', %d, %d, %d, %d)", receiver.getChatContainerName(),
+                            ChatContainerContractions.ID, CHATTER1, CHATTER2, NOT_CHECKED, ChatContainerContractions.IS_REMOVED,
+                            res, senderId, receiverId, 1, 0)
             );
         }
         jdbcTemplate.execute("USE " + CHATS);
@@ -202,5 +205,82 @@ public class UserRepository {
             return null;
         }
         return users.get(0);
+    }
+
+    public Message getLastVisibleSentMessage(String chatId) {
+        jdbcTemplate.execute("USE " + CHATS);
+        List<Message> messages = jdbcTemplate.query(
+                String.format("SELECT * FROM %s WHERE %s=0", chatId, ChatContractions.IS_REMOVED),
+                new MessageMapper()
+        );
+        if (messages.isEmpty()) {
+            return null;
+        }
+        return messages.get(messages.size() - 1);
+    }
+
+    public List<Chat> getChats(Integer userId) {
+        jdbcTemplate.execute("USE " + CONTAINERS);
+        List<Chat> chats = jdbcTemplate.query(
+                String.format("SELECT * FROM %d_container WHERE %s=0", userId, ChatContainerContractions.IS_REMOVED),
+                new ChatMapper()
+        );
+
+        if (chats.isEmpty()) {
+            return null;
+        }
+
+        int n = chats.size();
+
+        for (int i = 0; i < n;) {
+            Chat chat = chats.get(i);
+            if (getLastVisibleSentMessage(chat.getId()) == null) {
+                chats.remove(chat);
+                n--;
+            } else {
+                chat.setLastMessage(getLastVisibleSentMessage(chat.getId()));
+                chat.setNotChecked(getNumberOfNotChecked(chat.getId(), userId));
+                if (chat.getChatter1().equals(userId)) {
+                    chat.setChatterLocalNickname(getPersonalData(chat.getChatter2()).getNickname());
+                } else {
+                    chat.setChatterLocalNickname(getPersonalData(chat.getChatter1()).getNickname());
+                }
+                i++;
+            }
+        }
+        chats.sort((o1, o2) -> {
+            try {
+                return DateConverter.toDate(o1.getLastMessage().getTime()).before(
+                        DateConverter.toDate(o2.getLastMessage().getTime())
+                ) ? 0 : -1;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return 0;
+        });
+        return chats;
+    }
+
+    public Integer getNumberOfNotChecked(String chatId, Integer userId) {
+        jdbcTemplate.execute("USE " + CHATS);
+        List<Message> messages;
+        int sum = 0;
+        messages = getMessages(chatId);
+        for (Message message : messages) {
+            if (!message.getIsWatched() && !message.getAuthorId().equals(userId)) {
+                sum += 1;
+            }
+        }
+        return sum;
+    }
+
+    public Integer getNotCheckedNumber(Integer userId) {
+        jdbcTemplate.execute("USE " + CONTAINERS);
+        List<Chat> chats = getChats(userId);
+        int sum = 0;
+        for (Chat chat : chats) {
+            sum += getNumberOfNotChecked(chat.getId(), userId);
+        }
+        return sum;
     }
 }

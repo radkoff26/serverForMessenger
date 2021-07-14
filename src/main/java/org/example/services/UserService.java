@@ -1,5 +1,6 @@
 package org.example.services;
 
+import org.example.models.Chat;
 import org.example.models.Message;
 import org.example.models.MessageSending;
 import org.example.models.User;
@@ -87,5 +88,26 @@ public class UserService {
         if (token.equals(TOKEN_VALUE)) {
             userRepository.goOffline(userId);
         }
+    }
+
+    public Message getLastVisibleSentMessage(String chatId, String token) {
+        if (token.equals(TOKEN_VALUE)) {
+            return userRepository.getLastVisibleSentMessage(chatId);
+        }
+        return null;
+    }
+
+    public List<Chat> getChats(Integer userId, String token) {
+        if (token.equals(TOKEN_VALUE)) {
+            return userRepository.getChats(userId);
+        }
+        return null;
+    }
+
+    public Integer getNotCheckedNumber(Integer userId, String token) {
+        if (token.equals(TOKEN_VALUE)) {
+            return userRepository.getNotCheckedNumber(userId);
+        }
+        return null;
     }
 }

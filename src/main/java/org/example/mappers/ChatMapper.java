@@ -15,7 +15,8 @@ public class ChatMapper implements RowMapper<Chat> {
                 resultSet.getString(ID),
                 resultSet.getInt(CHATTER1),
                 resultSet.getInt(CHATTER2),
-                resultSet.getInt(IS_REMOVED) == 1
+                resultSet.getInt(IS_REMOVED) == 1,
+                resultSet.getInt(NOT_CHECKED)
         );
     }
 }

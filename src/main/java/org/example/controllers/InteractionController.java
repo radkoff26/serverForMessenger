@@ -101,4 +101,28 @@ public class InteractionController {
     ) {
         return userService.getPersonalData(userId, token);
     }
+
+    @PostMapping(value = "/getLastVisibleSentMessage", consumes = "application/json")
+    public Message getLastVisibleSentMessage(
+            @RequestHeader("token") String token,
+            @RequestBody String chatId
+    ) {
+        return userService.getLastVisibleSentMessage(chatId, token);
+    }
+
+    @PostMapping(value = "/getChats", consumes = "application/json")
+    public List<Chat> getChats(
+            @RequestHeader("token") String token,
+            @RequestBody Integer userId
+    ) {
+        return userService.getChats(userId, token);
+    }
+
+    @PostMapping(value = "/getNotCheckedNumber", consumes = "application/json")
+    public Integer getNotCheckedNumber(
+            @RequestHeader("token") String token,
+            @RequestBody Integer userId
+    ) {
+        return userService.getNotCheckedNumber(userId, token);
+    }
 }
