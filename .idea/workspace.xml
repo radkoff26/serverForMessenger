@@ -6,13 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="66274711-5611-4a16-bcd6-fc38d4ee070b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/contractions/ChatContainerContractions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/contractions/ChatContainerContractions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controllers/InteractionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controllers/InteractionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/mappers/ChatMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/mappers/ChatMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/models/Chat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/models/Chat.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/models/DateConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/models/DateConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repositories/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repositories/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/services/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/controllers/InteractionController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/controllers/InteractionController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/models/DateConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/models/DateConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/repositories/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/repositories/UserRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/services/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/services/UserService.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

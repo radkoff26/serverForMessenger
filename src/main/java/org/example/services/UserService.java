@@ -110,4 +110,18 @@ public class UserService {
         }
         return null;
     }
+
+    public Boolean isUserOnline(Integer userId, String token) {
+        if (token.equals(TOKEN_VALUE)) {
+            return userRepository.isUserOnline(userId);
+        }
+        return false;
+    }
+
+    public List<User> getUsers(String login, String userLogin, String token) {
+        if (token.equals(TOKEN_VALUE)) {
+            return userRepository.getUsers(login, userLogin);
+        }
+        return null;
+    }
 }

@@ -16,7 +16,6 @@ public class DateConverter {
 
     public static Date toDate(String n) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC+3"));
         return sdf.parse(n);
     }
 }

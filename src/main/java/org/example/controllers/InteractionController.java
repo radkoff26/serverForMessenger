@@ -36,7 +36,6 @@ public class InteractionController {
             @RequestHeader("token") String token,
             @RequestBody String chatId
     ) {
-        System.out.println(chatId);
         return userService.getMessages(chatId, token);
     }
 
@@ -45,6 +44,7 @@ public class InteractionController {
             @RequestHeader("token") String token,
             @RequestBody String body
     ) {
+        body = body.replace("\"", "");
         String chatId = body.split(" ")[0];
         Integer messageId = Integer.parseInt(body.split(" ")[1]);
         userService.watchMessage(chatId, messageId, token);
@@ -55,6 +55,7 @@ public class InteractionController {
             @RequestHeader("token") String token,
             @RequestBody String body
     ) {
+        body = body.replace("\"", "");
         String chatId = body.split(" ")[0];
         Integer messageId = Integer.parseInt(body.split(" ")[1]);
         userService.removeMessage(chatId, messageId, token);
@@ -89,6 +90,7 @@ public class InteractionController {
             @RequestHeader("token") String token,
             @RequestBody String body
     ) {
+        body = body.replace("\"", "");
         Integer userId = Integer.parseInt(body.split(" ")[0]);
         String nickname = body.split(" ")[1];
         userService.changeNickname(userId, nickname, token);
@@ -124,5 +126,24 @@ public class InteractionController {
             @RequestBody Integer userId
     ) {
         return userService.getNotCheckedNumber(userId, token);
+    }
+
+    @PostMapping(value = "/isUserOnline", consumes = "application/json")
+    public Boolean isUserOnline(
+            @RequestHeader("token") String token,
+            @RequestBody Integer userId
+    ) {
+        return userService.isUserOnline(userId, token);
+    }
+
+    @PostMapping(value = "/getUsers", consumes = "application/json")
+    public List<User> getUsers(
+            @RequestHeader("token") String token,
+            @RequestBody String body
+    ) {
+        body = body.replace("\"", "");
+        String login = body.split(" ")[0];
+        String userLogin = body.split(" ")[1];
+        return userService.getUsers(login, userLogin, token);
     }
 }

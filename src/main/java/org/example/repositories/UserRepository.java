@@ -61,7 +61,7 @@ public class UserRepository {
         jdbcTemplate.execute(String.format(
                 "INSERT INTO users (%s, %s, %s, %s, %s, %s, %s) VALUES('%s', '%s', '%s', '%s', '%s', '%s', %d)",
                 LOGIN, PASSWORD, CHAT_CONTAINER_NAME, NICKNAME, LAST_ONLINE, AVATAR_URL, IS_ONLINE,
-                login, finalPassword, chat_container, nickname, time, null, 1
+                login, finalPassword, chat_container, nickname, time, null, 0
                 )
         );
         jdbcTemplate.execute("USE " + CONTAINERS);
@@ -140,8 +140,29 @@ public class UserRepository {
     }
 
     public List<Message> getMessages(String chatId) {
+        jdbcTemplate.execute("USE " + CONTAINERS);
+        chatId = chatId.replace("\"", "");
+        int id = Integer.parseInt(chatId.split("_")[0]);
+        String chat_id_permuted = chatId.split("_")[1] + "_" + chatId.split("_")[0];
+        List<Chat> chats1 = jdbcTemplate.query("SELECT * FROM " + id + "_container WHERE id='" + chatId + "'", new ChatMapper());
+        List<Chat> chats2 = jdbcTemplate.query("SELECT * FROM " + id + "_container WHERE id='" + chat_id_permuted + "'", new ChatMapper());
+        if (chats1.isEmpty() && chats2.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<Chat> chats = chats1.isEmpty() ? chats2 : chats1;
         jdbcTemplate.execute("USE " + CHATS);
-        return jdbcTemplate.query("SELECT * FROM " + chatId, new MessageMapper());
+        List<Message> messages = jdbcTemplate.query("SELECT * FROM " + chats.get(0).getId() + " WHERE " + ChatContractions.IS_REMOVED + "=0", new MessageMapper());
+        messages.sort((o1, o2) -> {
+            try {
+                return DateConverter.toDate(o1.getTime()).before(
+                        DateConverter.toDate(o2.getTime())
+                ) ? 0 : -1;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return 0;
+        });
+        return messages;
     }
 
     public void watchMessage(String chatId, Integer messageId) {
@@ -232,7 +253,7 @@ public class UserRepository {
 
         int n = chats.size();
 
-        for (int i = 0; i < n;) {
+        for (int i = 0; i < n; ) {
             Chat chat = chats.get(i);
             if (getLastVisibleSentMessage(chat.getId()) == null) {
                 chats.remove(chat);
@@ -267,7 +288,7 @@ public class UserRepository {
         int sum = 0;
         messages = getMessages(chatId);
         for (Message message : messages) {
-            if (!message.getIsWatched() && !message.getAuthorId().equals(userId)) {
+            if (!message.getIsWatched() && !message.getAuthorId().equals(userId) && !message.getIsRemoved()) {
                 sum += 1;
             }
         }
@@ -278,9 +299,37 @@ public class UserRepository {
         jdbcTemplate.execute("USE " + CONTAINERS);
         List<Chat> chats = getChats(userId);
         int sum = 0;
-        for (Chat chat : chats) {
-            sum += getNumberOfNotChecked(chat.getId(), userId);
+        if (chats != null) {
+            for (Chat chat : chats) {
+                sum += getNumberOfNotChecked(chat.getId(), userId);
+            }
         }
         return sum;
+    }
+
+    public Boolean isUserOnline(Integer userId) {
+        jdbcTemplate.execute("USE " + MESSENGER);
+        List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE " + ID + "=" + userId, new UserMapper());
+        if (!users.isEmpty()) {
+            return users.get(0).getIsOnline();
+        }
+        return false;
+    }
+
+    public List<User> getUsers(String login, String userLogin) {
+        jdbcTemplate.execute("USE " + MESSENGER);
+        List<User> users = jdbcTemplate.query(
+                String.format("SELECT * FROM users WHERE %s='%s'", LOGIN, login),
+                new UserMapper()
+        );
+        List<User> alikeUsers = jdbcTemplate.query(
+                "SELECT * FROM users WHERE " + LOGIN + " LIKE '" + login + "%'",
+                new UserMapper()
+        );
+        alikeUsers.sort(Comparator.comparing(User::getLogin));
+        alikeUsers.removeIf(user -> user.getLogin().equals(login));
+        users.addAll(alikeUsers);
+        users.removeIf(user -> user.getLogin().equals(userLogin));
+        return users;
     }
 }
