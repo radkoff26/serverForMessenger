@@ -1,5 +1,6 @@
 package org.example.services;
 
+import org.example.crypt.Utility;
 import org.example.models.Chat;
 import org.example.models.Message;
 import org.example.models.MessageSending;
@@ -7,7 +8,10 @@ import org.example.models.User;
 import org.example.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 
 import static org.example.models.Constants.TOKEN_VALUE;
@@ -121,6 +125,16 @@ public class UserService {
     public List<User> getUsers(String login, String userLogin, String token) {
         if (token.equals(TOKEN_VALUE)) {
             return userRepository.getUsers(login, userLogin);
+        }
+        return null;
+    }
+
+    public String setAvatar(MultipartFile file, Integer userId, String token) throws IOException {
+        if (token.equals(TOKEN_VALUE)) {
+            String filename = Utility.generateFilename();
+            file.transferTo(Paths.get("images", filename + ".png"));
+            userRepository.setAvatar(filename, userId);
+            return filename;
         }
         return null;
     }

@@ -6,12 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="66274711-5611-4a16-bcd6-fc38d4ee070b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Application.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controllers/InteractionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controllers/InteractionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/models/DateConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/models/DateConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/models/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/models/Constants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repositories/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repositories/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/services/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/Application.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/org/example/controllers/InteractionController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/controllers/InteractionController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/example/models/DateConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/models/DateConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/models/Constants.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/models/Constants.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/org/example/repositories/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/repositories/UserRepository.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/org/example/services/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/services/UserService.class" afterDir="false" />
     </list>
@@ -47,7 +50,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../solution" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />

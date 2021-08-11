@@ -16,6 +16,7 @@ import org.example.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
 import java.util.*;
@@ -331,5 +332,15 @@ public class UserRepository {
         users.addAll(alikeUsers);
         users.removeIf(user -> user.getLogin().equals(userLogin));
         return users;
+    }
+
+    public void setAvatar(String filename, Integer userId) {
+        jdbcTemplate.execute("USE " + MESSENGER);
+        jdbcTemplate.execute(
+                String.format(
+                        "UPDATE users SET %s='%s' WHERE %s=%d",
+                        AVATAR_URL, filename, ID, userId
+                )
+        );
     }
 }

@@ -1,11 +1,24 @@
 package org.example.controllers;
 
+import com.sun.xml.internal.ws.util.ASCIIUtility;
+import org.apache.commons.io.IOUtils;
+import org.apache.tomcat.util.buf.Ascii;
+import org.example.crypt.Utility;
 import org.example.models.*;
 import org.example.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+
+import static org.example.models.Constants.FILENAME;
+import static org.example.models.Constants.TOKEN_VALUE;
 
 @RestController
 public class InteractionController {
@@ -145,5 +158,23 @@ public class InteractionController {
         String login = body.split(" ")[0];
         String userLogin = body.split(" ")[1];
         return userService.getUsers(login, userLogin, token);
+    }
+
+
+    @PostMapping(path = "/setAvatar", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public String setAvatar(
+            @RequestHeader("token") String token,
+            @RequestHeader("id") Integer userId,
+            @RequestPart("file") MultipartFile file
+    ) throws IOException {
+        return userService.setAvatar(file, userId, token);
+    }
+
+    @GetMapping(path = "/getAvatar", produces = {MediaType.IMAGE_PNG_VALUE})
+    public byte[] getAvatar(
+            @RequestParam("url") String url
+    ) throws IOException {
+        Path path = Paths.get(FILENAME, url + ".png");
+        return IOUtils.toByteArray(path.toUri());
     }
 }
